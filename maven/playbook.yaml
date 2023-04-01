@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Install python package
+      apt: 
+        pkg: software-properties-common
+        state: present
+    - name: Update cache
+      apt:
+        update_cache: yes
+      # 3. sudo apt update
+    - name: Install default-jdk
+      apt:
+        pkg: default-jdk
+        state: present
+    - name: Downloads Files
+      get_url: 
+        url: https://dlcdn.apache.org/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+        dest: /home/devops/Downloads/
+    - name: Unzip maven package
+      unarchive: 
+        src: /home/devops/Downloads/apache-maven-3.3.9-bin.tar.gz 
+        dest: /opt/
+    - name: Update alternatives
+      command: update-alternatives --install /usr/bin/mvn maven /opt/apache-maven-3.3.9/bin/mvn 1001 

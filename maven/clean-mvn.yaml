@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Uninstall python package
+      apt: 
+        pkg: software-properties-common
+        state: absent
+    - name: Update cache
+      apt:
+        update_cache: yes
+      # 3. sudo apt update
+    - name: Uninstall default-jdk
+      apt:
+        pkg: default-jdk
+        state: absent
+    - name: Delete apache-maven*.zip from Downloads 
+      file: 
+        path: /home/devops/Downloads/apache-maven-3.3.9-bin.tar.gz
+        state: absent
+    - name: remove mvn symlink
+      file: 
+        path: /etc/alternatives/maven 
+        state: absent
+    - name: remove mvn symlink
+      file: 
+        path: /usr/bin/mvn 
+        state: absent
+    - name: remove maven directory
+      file: 
+        path: /opt/apache-maven-3.3.9 
+        state: absent
+    

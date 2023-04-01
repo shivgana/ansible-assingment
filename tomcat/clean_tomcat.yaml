@@ -1,0 +1,37 @@
+---
+- hosts: localhost
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Update
+      apt:
+        update_cache: true
+        force_apt_get: true
+    - name: Uninstall JDK
+      apt: 
+        pkg: openjdk-8-jdk
+        state: absent
+    - name: Remove tomcat package from Downloads folder
+      file: 
+        path: /home/devops/Downloads/apache-tomcat-8.5.37.tar.gz
+        state: absent
+    - name: Remove tomcat package
+      file: 
+        path: /opt/tomcat
+        state: absent
+    - name: Remove tomcat.service file 
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state: absent
+    - name: Stop Tomcat
+      service:
+        name: tomcat
+        state: stopped
+     - name: Remove User tomcat
+      user: 
+        name: tomcat
+        state: absent
+    - name: Remove Group tomcat 
+      group: 
+        name: tomcat
+        state: absent
